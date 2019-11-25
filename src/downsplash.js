@@ -8,7 +8,9 @@ access_key = process.env.access_key || "YOUR ACCESS KEY";
 secret_key = process.env.secret_key || "YOUR SECRET KEY";
 
 const baseURL = "https://api.unsplash.com";
-const meta = JSON.parse(fs.readFileSync("./imgMeta.json", "utf8"));
+const meta = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "../output/imgMeta.json"), "utf8")
+);
 
 const authHeader = {
   Authorization: `Client-ID ${access_key}`
@@ -52,10 +54,10 @@ const scrapeImages = async (query = "city", items = 32) => {
 const downloadImages = async (imgs = []) => {
   for (let img of imgs) {
     const files = fs.readdirSync(
-      `C:/Users/janni/Documents/GitHub/Downsplash/imgs`
+      `C:/Users/janni/Documents/GitHub/Downsplash/output`
     );
 
-    let imgPath = path.resolve(__dirname, "../imgs", `${img.id}.jpg`);
+    let imgPath = path.resolve(__dirname, "../output", `${img.id}.jpg`);
 
     if (files.indexOf(`${img.id}.jpg`) == -1) {
       let writer = fs.createWriteStream(imgPath);
@@ -75,13 +77,18 @@ const downloadImages = async (imgs = []) => {
     }
   }
 
-  fs.writeFileSync("./imgMeta.json", JSON.stringify(meta));
+  fs.writeFileSync(
+    path.resolve(__dirname, "../output/imgMeta.json"),
+    JSON.stringify(meta)
+  );
 };
 
 const resizeImages = imgs => {
   for (let img of imgs) {
-    let image = sharp(`./imgs/${img.id}.jpg`);
-    image.resize(1080, 1350).toFile(`./imgs/resized/${img.id}.jpg`);
+    let image = sharp(path.resolve(__dirname, `../output/${img.id}.jpg`));
+    image
+      .resize(1080, 1350)
+      .toFile(path.resolve(__dirname, `../output/resized/${img.id}.jpg`));
   }
 };
 
@@ -89,9 +96,9 @@ const resizeImages = imgs => {
   let imgs = await scrapeImages("citys", 10);
   await downloadImages(imgs);
 
-  // resizeImages(imgs);
+  resizeImages(imgs);
 
   console.log(
-    "Finished downloading your images! The metadata is stored inside imgMeta.json. \nCheers mate."
+    "Finished downloading and resizing your images! The metadata is stored inside imgMeta.json. \nCheers mate."
   );
 })();
