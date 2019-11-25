@@ -1,2 +1,2 @@
 # Downsplash
- Download Unsplash images!
+ Download Unsplash images and resize them for Instagram!
