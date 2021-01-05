@@ -7,7 +7,7 @@
   "author": "Jannis Hajda <48177119+jannishajda@users.noreply.github.com>",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "requests": "^0.3.0",
     "sharp": "^0.23.3"
